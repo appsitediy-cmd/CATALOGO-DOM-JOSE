@@ -76,7 +76,7 @@
     <!-- ==================== VITRINE DO CLIENTE ==================== -->
     <section id="view-storefront" class="space-y-4">
       
-      <!-- Banner de Boas-Vindas com Botão Direto para WhatsApp -->
+      <!-- Banner de Boas-Vindas -->
       <div class="brand-banner-bg rounded-2xl p-4 sm:p-5 text-white shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="space-y-1">
           <span class="inline-block text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full">🛵 Entrega Rápida no Bairro</span>
@@ -101,7 +101,7 @@
 
       <!-- Grade de Produtos -->
       <div id="products-loading" class="text-center py-10 text-xs font-bold text-slate-500">
-        🔄 Sincronizando produtos do estoque Saurus...
+        🔄 Carregando produtos da vitrine...
       </div>
       <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
     </section>
@@ -110,30 +110,44 @@
     <section id="view-catalog-admin" class="hidden space-y-4">
       <div class="bg-slate-900 text-white rounded-2xl p-4 flex items-center justify-between">
         <div>
-          <span class="text-[10px] brand-accent-bg px-2 py-0.5 rounded-full font-bold uppercase">Gestão da Vitrine</span>
-          <h2 class="font-brand text-lg font-bold mt-0.5">Configurar Catálogo Online</h2>
+          <span class="text-[10px] brand-accent-bg px-2 py-0.5 rounded-full font-bold uppercase">Painel Gestor</span>
+          <h2 class="font-brand text-lg font-bold mt-0.5">Gerenciar Catálogo e Produtos</h2>
         </div>
         <button onclick="exitCatalogAdmin()" class="px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-bold">⬅️ Voltar à Loja</button>
       </div>
 
-      <!-- Cores e Logos do Catálogo -->
-      <div class="bg-white rounded-2xl p-4 border-2 shadow-sm space-y-4" style="border-color: var(--brand-card-border);">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <h3 class="font-bold text-slate-800 text-sm">🎨 Cores e Identidade do Catálogo</h3>
-          <button type="button" onclick="extractColorsFromLogo()" class="px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold">✨ Puxar Cor da Logo</button>
+      <!-- 1. Cadastrar ou Editar Produto -->
+      <div class="bg-white rounded-2xl p-4 border-2 shadow-sm space-y-3" style="border-color: var(--brand-card-border);">
+        <h3 id="form-prod-title" class="font-bold text-slate-800 text-sm">➕ Adicionar ou Editar Produto na Vitrine</h3>
+        <input type="hidden" id="edit-prod-id" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <input type="text" id="prod-name" placeholder="Nome do Produto (ex: Simparic 10 a 20kg)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold" />
+          <input type="text" id="prod-category" placeholder="Categoria (ex: Antipulgas, Rações, Petiscos)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs" />
         </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <input type="number" step="0.01" id="prod-price" placeholder="Preço de Venda R$ (ex: 89.90)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold brand-accent-text" />
+          <input type="text" id="prod-image" placeholder="Link da Foto/Imagem (Opcional - URL da internet)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs" />
+        </div>
+        <div class="flex gap-2 pt-1">
+          <button onclick="saveAdminProduct()" class="flex-1 py-2.5 rounded-xl bg-[#6AB43E] text-white font-bold text-xs shadow">💾 Salvar Produto</button>
+          <button onclick="resetAdminProductForm()" id="btn-cancel-edit" class="hidden px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">Cancelar</button>
+        </div>
+      </div>
+
+      <!-- 2. Lista de Produtos Cadastrados (Para Editar ou Excluir) -->
+      <div class="bg-white rounded-2xl p-4 border-2 shadow-sm space-y-3" style="border-color: var(--brand-card-border);">
+        <div class="flex items-center justify-between border-b pb-2">
+          <h3 class="font-bold text-slate-800 text-sm">📋 Produtos na Vitrine (<span id="admin-prod-count">0</span>)</h3>
+          <input type="text" id="admin-prod-search" oninput="renderAdminProductsList()" placeholder="🔍 Filtrar produtos..." class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs w-48 bg-slate-50" />
+        </div>
+        <div id="admin-products-list" class="space-y-2 max-h-72 overflow-y-auto"></div>
+      </div>
+
+      <!-- 3. Cores e Identidade -->
+      <div class="bg-white rounded-2xl p-4 border-2 shadow-sm space-y-3" style="border-color: var(--brand-card-border);">
+        <h3 class="font-bold text-slate-800 text-sm">🎨 Cores, WhatsApp e Título do Banner</h3>
         <div id="theme-presets-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-          <div class="p-3 rounded-xl theme-stage-box border space-y-2">
-            <span class="block text-xs font-bold text-slate-700">🔵 Logo 1: Símbolo Redondo</span>
-            <input type="file" accept="image/*" onchange="handleLogoUpload(event, 'symbol')" class="w-full text-[11px]" />
-          </div>
-          <div class="p-3 rounded-xl theme-stage-box border space-y-2">
-            <span class="block text-xs font-bold text-slate-700">▭ Logo 2: Nome Retangular</span>
-            <input type="file" accept="image/*" onchange="handleLogoUpload(event, 'name')" class="w-full text-[11px]" />
-          </div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
           <div>
             <label class="block text-xs font-bold text-slate-600 mb-1">Título do Banner</label>
             <input type="text" id="adm-banner-title" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
@@ -143,13 +157,13 @@
             <input type="text" id="adm-whatsapp" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
           </div>
         </div>
-        <button onclick="saveCatalogConfig()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-xs shadow">💾 Salvar Visual e Configurações na Nuvem</button>
+        <button onclick="saveCatalogConfig()" class="w-full py-2.5 rounded-xl brand-primary-bg text-xs font-bold shadow">💾 Salvar Configurações Gerais</button>
       </div>
 
-      <!-- Pedidos Recebidos -->
+      <!-- 4. Pedidos Recebidos -->
       <div class="bg-white rounded-2xl p-4 border-2 shadow-sm space-y-3" style="border-color: var(--brand-card-border);">
         <h3 class="font-bold text-slate-800 text-sm">📦 Pedidos Feitos pelo Catálogo</h3>
-        <div id="adm-orders-list" class="space-y-2 max-h-72 overflow-y-auto"></div>
+        <div id="adm-orders-list" class="space-y-2 max-h-56 overflow-y-auto"></div>
       </div>
     </section>
 
@@ -262,9 +276,7 @@
       pin: '1234',
       themeId: 'recanto',
       primaryColor: '#23B5C8',
-      accentColor: '#EE3E80',
-      logoSymbolBase64: '',
-      logoNameBase64: ''
+      accentColor: '#EE3E80'
     };
 
     let products = [];
@@ -312,27 +324,6 @@
       r.style.setProperty('--brand-accent', a);
 
       document.getElementById('banner-title').textContent = catConfig.bannerTitle || 'Catálogo Online — Jardim Dom José';
-
-      const defLogo = document.getElementById('default-logo-elements');
-      const wrap = document.getElementById('custom-logos-wrapper');
-      const symF = document.getElementById('header-symbol-frame');
-      const namF = document.getElementById('header-name-frame');
-
-      if (!catConfig.logoSymbolBase64 && !catConfig.logoNameBase64) {
-        defLogo.classList.remove('hidden');
-        wrap.classList.add('hidden');
-      } else {
-        defLogo.classList.add('hidden');
-        wrap.classList.remove('hidden');
-        if (catConfig.logoSymbolBase64) {
-          document.getElementById('custom-symbol-img').src = catConfig.logoSymbolBase64;
-          symF.classList.remove('hidden');
-        } else symF.classList.add('hidden');
-        if (catConfig.logoNameBase64) {
-          document.getElementById('custom-name-img').src = catConfig.logoNameBase64;
-          namF.classList.remove('hidden');
-        } else namF.classList.add('hidden');
-      }
 
       const grid = document.getElementById('theme-presets-grid');
       if (grid) {
@@ -451,7 +442,7 @@
         return `
           <div class="bg-white rounded-2xl p-3 shadow-sm border-2 flex flex-col justify-between space-y-2.5" style="border-color: var(--brand-card-border);">
             <div>
-              <div class="h-24 rounded-xl theme-stage-box flex items-center justify-center overflow-hidden mb-2">
+              <div class="h-28 rounded-xl theme-stage-box flex items-center justify-center overflow-hidden mb-2 bg-white">
                 ${p.image ? `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-contain p-1" />` : `<span class="text-3xl">${p.emoji || '🐾'}</span>`}
               </div>
               <span class="text-[10px] font-bold uppercase brand-primary-text block">${p.category}</span>
@@ -587,11 +578,6 @@
             tipo_entrega: deliveryType,
             status: 'PENDENTE'
           });
-          await sb.from('catalogo_clientes').upsert({
-            telefone: phone,
-            nome: name,
-            endereco: address || ''
-          });
         } catch (err) {
           console.warn('Pedido enviado via WhatsApp:', err);
         }
@@ -633,59 +619,100 @@
       document.getElementById('adm-banner-title').value = catConfig.bannerTitle || '';
       document.getElementById('adm-whatsapp').value = catConfig.whatsapp || '5511919701433';
       applyTheme();
+      renderAdminProductsList();
       loadCatalogOrdersAdmin();
     }
     function exitCatalogAdmin() {
       document.getElementById('view-catalog-admin').classList.add('hidden');
       document.getElementById('view-storefront').classList.remove('hidden');
+      loadCatalogFromCloud();
     }
 
-    function handleLogoUpload(event, part) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const max = part === 'symbol' ? 200 : 380;
-          let w = img.width, h = img.height;
-          if (w > max || h > max) {
-            if (w > h) { h = Math.round(h * max / w); w = max; }
-            else { w = Math.round(w * max / h); h = max; }
-          }
-          canvas.width = w; canvas.height = h;
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          if (part === 'symbol') catConfig.logoSymbolBase64 = canvas.toDataURL('image/png', 0.85);
-          else catConfig.logoNameBase64 = canvas.toDataURL('image/png', 0.85);
-          applyTheme();
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    function resetAdminProductForm() {
+      document.getElementById('edit-prod-id').value = '';
+      document.getElementById('prod-name').value = '';
+      document.getElementById('prod-category').value = '';
+      document.getElementById('prod-price').value = '';
+      document.getElementById('prod-image').value = '';
+      document.getElementById('form-prod-title').textContent = '➕ Adicionar ou Editar Produto na Vitrine';
+      document.getElementById('btn-cancel-edit').classList.add('hidden');
     }
 
-    function extractColorsFromLogo() {
-      const src = catConfig.logoSymbolBase64 || catConfig.logoNameBase64;
-      if (!src) return alert('Envie uma logo primeiro!');
-      const img = new Image();
-      img.onload = () => {
-        const c = document.createElement('canvas');
-        const ctx = c.getContext('2d');
-        c.width = 60; c.height = 60;
-        ctx.drawImage(img, 0, 0, 60, 60);
-        const d = ctx.getImageData(0, 0, 60, 60).data;
-        for (let i = 0; i < d.length; i += 4) {
-          if (d[i+3] > 150 && !(d[i] > 230 && d[i+1] > 230 && d[i+2] > 230) && !(d[i] < 30 && d[i+1] < 30 && d[i+2] < 30)) {
-            const hex = '#' + [d[i], d[i+1], d[i+2]].map(v => v.toString(16).padStart(2, '0')).join('');
-            catConfig.themeId = 'custom';
-            catConfig.primaryColor = hex;
-            applyTheme();
-            return alert('✨ Cor extraída da logo! Clique em Salvar Visual.');
-          }
+    async function saveAdminProduct() {
+      const id = document.getElementById('edit-prod-id').value.trim();
+      const nome = document.getElementById('prod-name').value.trim();
+      const categoria = document.getElementById('prod-category').value.trim() || 'Produtos';
+      const preco = parseFloat(document.getElementById('prod-price').value) || 0;
+      const imagem_url = document.getElementById('prod-image').value.trim();
+
+      if (!nome || preco <= 0) return alert('Preencha o nome e o preço de venda!');
+
+      if (sb) {
+        if (id) {
+          await sb.from('catalogo_dom_jose').update({ nome_sistema: nome, categoria, preco, imagem_url }).eq('cod_produto', id);
+        } else {
+          const newCod = 'manual_' + Date.now();
+          await sb.from('catalogo_dom_jose').insert({ cod_produto: newCod, nome_sistema: nome, categoria, preco, imagem_url, estoque: 10, ativo: true });
         }
-      };
-      img.src = src;
+      }
+      resetAdminProductForm();
+      await loadCatalogFromCloud();
+      renderAdminProductsList();
+      alert('✅ Produto salvo com sucesso!');
+    }
+
+    function editProduct(id) {
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('edit-prod-id').value = p.id;
+      document.getElementById('prod-name').value = p.name;
+      document.getElementById('prod-category').value = p.category;
+      document.getElementById('prod-price').value = p.price;
+      document.getElementById('prod-image').value = p.image || '';
+      document.getElementById('form-prod-title').textContent = `✏️ Editando: ${p.name}`;
+      document.getElementById('btn-cancel-edit').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function deleteProduct(id) {
+      if (confirm('Deseja realmente remover este produto da vitrine?')) {
+        if (sb) {
+          await sb.from('catalogo_dom_jose').delete().eq('cod_produto', id);
+        }
+        await loadCatalogFromCloud();
+        renderAdminProductsList();
+      }
+    }
+
+    function renderAdminProductsList() {
+      const list = document.getElementById('admin-products-list');
+      const search = document.getElementById('admin-prod-search').value.trim().toLowerCase();
+      document.getElementById('admin-prod-count').textContent = products.length;
+
+      const filtered = products.filter(p => !search || p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search));
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Nenhum produto encontrado.</p>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(p => `
+        <div class="p-2.5 rounded-xl theme-stage-box border flex items-center justify-between gap-2 text-xs">
+          <div class="flex items-center gap-2 flex-1 min-w-0">
+            <div class="w-10 h-10 bg-white rounded-lg border flex items-center justify-center shrink-0 overflow-hidden">
+              ${p.image ? `<img src="${p.image}" class="w-full h-full object-contain" />` : `<span>🐾</span>`}
+            </div>
+            <div class="truncate">
+              <strong class="text-slate-800 block truncate">${p.name}</strong>
+              <span class="text-[11px] text-slate-600">${p.category} • <strong class="brand-accent-text">R$ ${formatMoney(p.price)}</strong></span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="editProduct('${p.id}')" class="px-2.5 py-1.5 bg-white border border-slate-300 font-bold rounded-lg">✏️ Editar</button>
+            <button onclick="deleteProduct('${p.id}')" class="px-2.5 py-1.5 bg-red-50 text-red-600 font-bold rounded-lg">🗑️ Excluir</button>
+          </div>
+        </div>
+      `).join('');
     }
 
     async function saveCatalogConfig() {
@@ -696,7 +723,7 @@
       if (sb) {
         await sb.from('catalogo_config').upsert({ id: 1, data: catConfig });
       }
-      alert('✅ Visual e configurações do catálogo salvos!');
+      alert('✅ Configurações salvas!');
     }
 
     async function loadCatalogOrdersAdmin() {
