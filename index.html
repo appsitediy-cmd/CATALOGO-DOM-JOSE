@@ -37,7 +37,7 @@
   <header class="bg-white shadow-sm sticky top-1.5 z-40 h-16 flex items-center border-b" style="border-color: var(--brand-card-border);">
     <div class="max-w-4xl w-full mx-auto px-4 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2.5 h-12">
-        <div id="default-logo-elements" class="flex items-center gap-2.5">
+        <div class="flex items-center gap-2.5">
           <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center shadow-sm shrink-0" style="border-color: var(--brand-primary); background-color: var(--brand-card-bg);">
             <span class="font-brand text-xl font-bold leading-none brand-primary-text">R</span>
           </div>
@@ -46,15 +46,6 @@
               <span class="text-[#EE3E80]">R</span><span class="text-[#6AB43E]">e</span><span class="text-[#23B5C8]">c</span><span class="text-[#FDD815] drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]">a</span><span class="text-[#EE3E80]">n</span><span class="text-[#6AB43E]">t</span><span class="text-[#23B5C8]">o</span>
             </div>
             <span class="block text-[9px] font-bold tracking-[0.22em] text-slate-600 uppercase mt-0.5">PETSHOP • DOM JOSÉ</span>
-          </div>
-        </div>
-
-        <div id="custom-logos-wrapper" class="hidden flex items-center gap-2.5">
-          <div id="header-symbol-frame" class="hidden w-10 h-10 rounded-full overflow-hidden border border-slate-200 shadow-sm shrink-0 flex items-center justify-center bg-white">
-            <img id="custom-symbol-img" class="w-full h-full object-cover" alt="Logo" />
-          </div>
-          <div id="header-name-frame" class="hidden h-9 flex items-center">
-            <img id="custom-name-img" class="h-full max-w-[165px] object-contain" alt="Nome" />
           </div>
         </div>
       </div>
@@ -81,7 +72,7 @@
         <div class="space-y-1">
           <span class="inline-block text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full">🛵 Entrega Rápida no Bairro</span>
           <h1 class="font-brand text-xl sm:text-2xl font-bold leading-tight" id="banner-title">Catálogo Online — Jardim Dom José</h1>
-          <p class="text-xs text-white/95" id="banner-subtitle">Escolha suas rações, petiscos e antipulgas ou fale direto conosco no WhatsApp!</p>
+          <p class="text-xs text-white/95">Escolha suas rações, petiscos e antipulgas ou fale direto conosco no WhatsApp!</p>
         </div>
         <button onclick="openDirectWhatsApp()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-xs shadow-md flex items-center justify-center gap-1.5 shrink-0 active:scale-95">
           <span>📲 Chamar no WhatsApp</span>
@@ -91,7 +82,7 @@
       <!-- Barra de Busca -->
       <div class="bg-white rounded-2xl p-3 shadow-sm border-2 flex items-center gap-2" style="border-color: var(--brand-card-border);">
         <span class="text-base pl-1">🔍</span>
-        <input type="search" id="catalog-search" name="busca_vitrine_cliente" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly onfocus="this.removeAttribute('readonly');" oninput="renderCatalog()" placeholder="Buscar ração, Simparic, Credeli, sachê, petisco..." 
+        <input type="search" id="catalog-search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="renderCatalog()" placeholder="Buscar ração, Simparic, Credeli, sachê, petisco..." 
           class="w-full text-sm bg-transparent focus:outline-none text-slate-800" />
         <button onclick="clearSearch()" id="btn-clear-search" class="hidden text-xs font-bold text-slate-400 px-2">✕</button>
       </div>
@@ -121,12 +112,12 @@
         <h3 id="form-prod-title" class="font-bold text-slate-800 text-sm">➕ Adicionar ou Editar Produto na Vitrine</h3>
         <input type="hidden" id="edit-prod-id" />
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          <input type="text" id="prod-name" placeholder="Nome do Produto (ex: Simparic 10 a 20kg)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold" />
-          <input type="text" id="prod-category" placeholder="Categoria (ex: Antipulgas, Rações, Petiscos)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs" />
+          <input type="text" id="prod-name" placeholder="Nome do Produto (ex: Simparic 10 a 20kg)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold bg-white" />
+          <input type="text" id="prod-category" placeholder="Categoria (ex: Antipulgas, Rações, Petiscos)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white" />
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          <input type="number" step="0.01" id="prod-price" placeholder="Preço de Venda R$ (ex: 89.90)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold brand-accent-text" />
-          <input type="text" id="prod-image" placeholder="Link da Foto/Imagem (Opcional - URL da internet)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs" />
+          <input type="number" step="0.01" id="prod-price" placeholder="Preço de Venda R$ (ex: 89.90)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold brand-accent-text bg-white" />
+          <input type="text" id="prod-image" placeholder="Link da Foto/Imagem (URL da internet)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white" />
         </div>
         <div class="flex gap-2 pt-1">
           <button onclick="saveAdminProduct()" class="flex-1 py-2.5 rounded-xl bg-[#6AB43E] text-white font-bold text-xs shadow">💾 Salvar Produto</button>
@@ -138,23 +129,23 @@
       <div class="bg-white rounded-2xl p-4 border-2 shadow-sm space-y-3" style="border-color: var(--brand-card-border);">
         <div class="flex items-center justify-between border-b pb-2">
           <h3 class="font-bold text-slate-800 text-sm">📋 Produtos na Vitrine (<span id="admin-prod-count">0</span>)</h3>
-          <input type="text" id="admin-prod-search" oninput="renderAdminProductsList()" placeholder="🔍 Filtrar produtos..." class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs w-48 bg-slate-50" />
+          <input type="text" id="admin-prod-search" oninput="renderAdminProductsList()" placeholder="🔍 Filtrar produtos..." class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs w-48 bg-white" />
         </div>
         <div id="admin-products-list" class="space-y-2 max-h-72 overflow-y-auto"></div>
       </div>
 
-      <!-- 3. Cores e Identidade -->
+      <!-- 3. Cores e Configurações -->
       <div class="bg-white rounded-2xl p-4 border-2 shadow-sm space-y-3" style="border-color: var(--brand-card-border);">
         <h3 class="font-bold text-slate-800 text-sm">🎨 Cores, WhatsApp e Título do Banner</h3>
         <div id="theme-presets-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
           <div>
             <label class="block text-xs font-bold text-slate-600 mb-1">Título do Banner</label>
-            <input type="text" id="adm-banner-title" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
+            <input type="text" id="adm-banner-title" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white" />
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-600 mb-1">WhatsApp da Unidade (com 55 + DDD)</label>
-            <input type="text" id="adm-whatsapp" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
+            <input type="text" id="adm-whatsapp" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white" />
           </div>
         </div>
         <button onclick="saveCatalogConfig()" class="w-full py-2.5 rounded-xl brand-primary-bg text-xs font-bold shadow">💾 Salvar Configurações Gerais</button>
@@ -270,6 +261,13 @@
       { id: 'urbano', name: 'Urbano Contraste', primary: '#1E293B', accent: '#EA580C' }
     ];
 
+    const FALLBACK_PRODUCTS = [
+      { id: 'demo_1', name: 'Antipulgas Simparic 10,1 a 20kg (1 comp.)', category: 'Antipulgas', price: 89.90, image: '', emoji: '💊' },
+      { id: 'demo_2', name: 'Antipulgas Credeli Cães 11 a 22kg', category: 'Antipulgas', price: 94.90, image: '', emoji: '🛡️' },
+      { id: 'demo_3', name: 'Sachê Friskies Gatos Adultos 85g', category: 'Gatos', price: 3.99, image: '', emoji: '🐱' },
+      { id: 'demo_4', name: 'Ração Golden Fórmula Cães Adultos Frango 15kg', category: 'Rações', price: 169.90, image: '', emoji: '🐶' }
+    ];
+
     let catConfig = JSON.parse(localStorage.getItem('recanto_cat_cfg_v1')) || {
       bannerTitle: 'Catálogo Online — Jardim Dom José',
       whatsapp: '5511919701433',
@@ -357,14 +355,16 @@
       const name = row.nome_sistema || row.nome || row.descricao || row.produto || row.titulo || row.name || 'Produto';
       const category = row.categoria || row.grupo || row.departamento || row.category || 'Produtos';
       const price = Number(row.preco ?? row.preco_venda ?? row.valor ?? row.price ?? 0);
-      const stock = row.estoque ?? row.saldo ?? row.quantidade ?? row.stock ?? 10;
       const image = row.imagem_url || row.foto || row.imagem || row.image || '';
-      return { id: String(id), name, category, price, stock, image, emoji: '🐾' };
+      return { id: String(id), name, category, price, image, emoji: '🐾' };
     }
 
     async function loadCatalogFromCloud() {
       if (!sb) {
+        products = [...FALLBACK_PRODUCTS];
         document.getElementById('products-loading').classList.add('hidden');
+        renderCategories();
+        renderCatalog();
         return;
       }
 
@@ -384,8 +384,13 @@
             .map(normalizeProductRow)
             .filter(p => p.price > 0);
         }
+
+        if (products.length === 0) {
+          products = [...FALLBACK_PRODUCTS];
+        }
       } catch (e) {
         console.error('Erro ao carregar catálogo:', e);
+        products = [...FALLBACK_PRODUCTS];
       } finally {
         document.getElementById('products-loading').classList.add('hidden');
         renderCategories();
