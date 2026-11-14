@@ -59,10 +59,15 @@
         </div>
       </div>
 
-      <button onclick="openCartModal()" class="px-3.5 py-2 rounded-xl brand-accent-bg text-xs font-bold shadow flex items-center gap-1.5 active:scale-95">
-        <span>🛒 Sacola</span>
-        <span id="header-cart-count" class="bg-white text-slate-900 px-1.5 py-0.5 rounded-full text-[11px] font-extrabold leading-none">0</span>
-      </button>
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button onclick="openDirectWhatsApp()" class="px-3 py-2 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-white text-xs font-bold shadow flex items-center gap-1 active:scale-95">
+          <span>💬 WhatsApp</span>
+        </button>
+        <button onclick="openCartModal()" class="px-3 py-2 rounded-xl brand-accent-bg text-xs font-bold shadow flex items-center gap-1.5 active:scale-95">
+          <span>🛒 Sacola</span>
+          <span id="header-cart-count" class="bg-white text-slate-900 px-1.5 py-0.5 rounded-full text-[11px] font-extrabold leading-none">0</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -71,17 +76,22 @@
     <!-- ==================== VITRINE DO CLIENTE ==================== -->
     <section id="view-storefront" class="space-y-4">
       
-      <!-- Banner de Boas-Vindas -->
-      <div class="brand-banner-bg rounded-2xl p-4 sm:p-5 text-white shadow-md space-y-1">
-        <span class="inline-block text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full">🛵 Entrega Rápida no Bairro</span>
-        <h1 class="font-brand text-xl sm:text-2xl font-bold leading-tight" id="banner-title">Catálogo Online — Jardim Dom José</h1>
-        <p class="text-xs text-white/90" id="banner-subtitle">Escolha suas rações, petiscos e antipulgas e envie seu pedido direto no WhatsApp!</p>
+      <!-- Banner de Boas-Vindas com Botão Direto para WhatsApp -->
+      <div class="brand-banner-bg rounded-2xl p-4 sm:p-5 text-white shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="space-y-1">
+          <span class="inline-block text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full">🛵 Entrega Rápida no Bairro</span>
+          <h1 class="font-brand text-xl sm:text-2xl font-bold leading-tight" id="banner-title">Catálogo Online — Jardim Dom José</h1>
+          <p class="text-xs text-white/95" id="banner-subtitle">Escolha suas rações, petiscos e antipulgas ou fale direto conosco no WhatsApp!</p>
+        </div>
+        <button onclick="openDirectWhatsApp()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-xs shadow-md flex items-center justify-center gap-1.5 shrink-0 active:scale-95">
+          <span>📲 Chamar no WhatsApp</span>
+        </button>
       </div>
 
       <!-- Barra de Busca -->
       <div class="bg-white rounded-2xl p-3 shadow-sm border-2 flex items-center gap-2" style="border-color: var(--brand-card-border);">
         <span class="text-base pl-1">🔍</span>
-        <input type="text" id="catalog-search" oninput="renderCatalog()" placeholder="Buscar ração, Simparic, Credeli, sachê, petisco..." 
+        <input type="search" id="catalog-search" name="busca_vitrine_cliente" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly onfocus="this.removeAttribute('readonly');" oninput="renderCatalog()" placeholder="Buscar ração, Simparic, Credeli, sachê, petisco..." 
           class="w-full text-sm bg-transparent focus:outline-none text-slate-800" />
         <button onclick="clearSearch()" id="btn-clear-search" class="hidden text-xs font-bold text-slate-400 px-2">✕</button>
       </div>
@@ -91,7 +101,7 @@
 
       <!-- Grade de Produtos -->
       <div id="products-loading" class="text-center py-10 text-xs font-bold text-slate-500">
-        🔄 Carregando produtos da loja...
+        🔄 Sincronizando produtos do estoque Saurus...
       </div>
       <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
     </section>
@@ -136,18 +146,7 @@
         <button onclick="saveCatalogConfig()" class="w-full py-3 rounded-xl bg-[#6AB43E] text-white font-bold text-xs shadow">💾 Salvar Visual e Configurações na Nuvem</button>
       </div>
 
-      <!-- Cadastrar Produto Manualmente no Catálogo -->
-      <div class="bg-white rounded-2xl p-4 border-2 shadow-sm space-y-3" style="border-color: var(--brand-card-border);">
-        <h3 class="font-bold text-slate-800 text-sm">➕ Adicionar Produto Manual na Vitrine</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          <input type="text" id="new-prod-name" placeholder="Nome (ex: Simparic 10 a 20kg)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-          <input type="text" id="new-prod-cat" placeholder="Categoria (ex: Antipulgas)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs" />
-          <input type="number" step="0.01" id="new-prod-price" placeholder="Preço R$ (ex: 89.90)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
-        </div>
-        <button onclick="addManualProduct()" class="w-full py-2.5 rounded-xl brand-primary-bg text-xs font-bold shadow-sm">+ Publicar Produto no Catálogo</button>
-      </div>
-
-      <!-- Últimos Pedidos Recebidos pelo Catálogo -->
+      <!-- Pedidos Recebidos -->
       <div class="bg-white rounded-2xl p-4 border-2 shadow-sm space-y-3" style="border-color: var(--brand-card-border);">
         <h3 class="font-bold text-slate-800 text-sm">📦 Pedidos Feitos pelo Catálogo</h3>
         <div id="adm-orders-list" class="space-y-2 max-h-72 overflow-y-auto"></div>
@@ -156,7 +155,13 @@
 
   </main>
 
-  <!-- BARRA FLUTUANTE DA SACOLA NO CELULAR -->
+  <!-- BOTÃO FLUTUANTE DO WHATSAPP -->
+  <button id="floating-wa-btn" onclick="openDirectWhatsApp()" title="Chamar no WhatsApp" class="fixed bottom-4 right-4 z-40 px-4 py-3 rounded-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-xs shadow-xl flex items-center gap-2 active:scale-95 transition-all">
+    <span class="text-base leading-none">💬</span>
+    <span>Atendimento Zap</span>
+  </button>
+
+  <!-- BARRA FLUTUANTE DA SACOLA -->
   <div id="floating-cart-bar" class="hidden fixed bottom-3 left-3 right-3 max-w-4xl mx-auto z-40">
     <button onclick="openCartModal()" class="w-full py-3.5 px-5 rounded-2xl bg-slate-900 text-white shadow-xl flex items-center justify-between">
       <div class="flex items-center gap-2">
@@ -167,7 +172,7 @@
     </button>
   </div>
 
-  <!-- MODAL: SACOLA E FINALIZAÇÃO DE PEDIDO WHATSAPP -->
+  <!-- MODAL: SACOLA -->
   <div id="cart-modal" class="fixed inset-0 bg-black/65 z-50 hidden items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
       <div class="p-4 border-b border-slate-100 flex items-center justify-between shrink-0">
@@ -205,7 +210,7 @@
           <span class="text-xs font-bold text-slate-600">Total do Pedido:</span>
           <span id="modal-cart-total" class="font-brand text-xl font-bold brand-accent-text">R$ 0,00</span>
         </div>
-        <button onclick="submitCatalogOrder()" id="btn-send-whatsapp-order" class="w-full py-3.5 rounded-xl bg-[#6AB43E] hover:bg-[#5ca034] text-white font-bold text-sm shadow flex items-center justify-center gap-2">
+        <button onclick="submitCatalogOrder()" id="btn-send-whatsapp-order" class="w-full py-3.5 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-sm shadow flex items-center justify-center gap-2">
           📲 Enviar Pedido no WhatsApp
         </button>
       </div>
@@ -216,8 +221,8 @@
   <div id="pin-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-xs w-full p-5 space-y-4 text-center shadow-xl">
       <h3 class="font-bold text-slate-800 text-base">🔒 Configurar Vitrine</h3>
-      <p class="text-xs text-slate-500">Acesso exclusivo do lojista (Padrão: 1234)</p>
-      <input type="password" id="pin-input" placeholder="••••" maxlength="8" class="w-full text-center text-xl tracking-widest font-bold px-3 py-2.5 rounded-xl border border-slate-300" />
+      <p class="text-xs text-slate-500">Acesso exclusivo do lojista</p>
+      <input type="password" id="pin-input" name="admin_pin_vitrine" autocomplete="new-password" placeholder="••••" maxlength="8" class="w-full text-center text-xl tracking-widest font-bold px-3 py-2.5 rounded-xl border border-slate-300" />
       <div class="grid grid-cols-2 gap-2">
         <button onclick="closePinModal()" class="py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">Cancelar</button>
         <button onclick="verifyCatalogPin()" class="py-2.5 rounded-xl brand-primary-bg text-xs font-bold">Entrar</button>
@@ -225,11 +230,15 @@
     </div>
   </div>
 
-  <!-- Rodapé Público -->
-  <footer class="bg-white border-t mt-8 py-5 px-4 text-center text-xs text-slate-500 space-y-1.5" style="border-color: var(--brand-card-border);">
+  <footer class="bg-white border-t mt-8 py-5 px-4 text-center text-xs text-slate-500 space-y-2" style="border-color: var(--brand-card-border);">
     <p class="font-bold text-slate-800">Recanto Petshop — Unidade Jardim Dom José</p>
     <p>📍 Rua Lorena, 237 - Jardim Dom José, Embu das Artes - SP</p>
-    <div class="pt-2">
+    <div>
+      <button onclick="openDirectWhatsApp()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-xs">
+        <span>💬 WhatsApp da Loja: (11) 91970-1433</span>
+      </button>
+    </div>
+    <div class="pt-1">
       <button onclick="openPinModal()" class="text-[11px] text-slate-400 hover:text-slate-700 underline">🔒 Área do Lojista</button>
     </div>
   </footer>
@@ -247,13 +256,6 @@
       { id: 'urbano', name: 'Urbano Contraste', primary: '#1E293B', accent: '#EA580C' }
     ];
 
-    const FALLBACK_PRODUCTS = [
-      { id: 'demo_1', name: 'Antipulgas Simparic 10,1 a 20kg (1 comp.)', category: 'Antipulgas', price: 89.90, stock: 10, emoji: '💊' },
-      { id: 'demo_2', name: 'Antipulgas Credeli Cães 11 a 22kg', category: 'Antipulgas', price: 94.90, stock: 8, emoji: '🛡️' },
-      { id: 'demo_3', name: 'Sachê Friskies Gatos Adultos 85g (Sabores)', category: 'Gatos', price: 3.99, stock: 45, emoji: '🐱' },
-      { id: 'demo_4', name: 'Ração Golden Fórmula Cães Adultos Frango 15kg', category: 'Rações', price: 169.90, stock: 6, emoji: '🐶' }
-    ];
-
     let catConfig = JSON.parse(localStorage.getItem('recanto_cat_cfg_v1')) || {
       bannerTitle: 'Catálogo Online — Jardim Dom José',
       whatsapp: '5511919701433',
@@ -269,6 +271,15 @@
     let cart = JSON.parse(localStorage.getItem('recanto_cat_cart_v1') || '[]');
     let selectedCategory = 'Todos';
     let deliveryType = 'Entrega';
+
+    function openDirectWhatsApp(productName = '') {
+      const storeWa = (catConfig.whatsapp || '5511919701433').replace(/\D/g, '');
+      const fullWa = storeWa.startsWith('55') ? storeWa : '55' + storeWa;
+      const text = productName
+        ? `Olá, *Recanto Petshop (Dom José)*! 🐾 Vi no catálogo online e gostaria de saber mais sobre: *${productName}*.`
+        : `Olá, *Recanto Petshop (Dom José)*! 🐾 Vim pelo Catálogo Online e gostaria de tirar uma dúvida.`;
+      window.open(`https://wa.me/${fullWa}?text=${encodeURIComponent(text)}`, '_blank');
+    }
 
     function shadeHex(hex, pct) {
       let num = parseInt(hex.replace('#', ''), 16);
@@ -351,25 +362,22 @@
     }
 
     function normalizeProductRow(row) {
-      const name = row.nome || row.descricao || row.produto || row.titulo || row.name || 'Produto';
+      const id = row.cod_produto || row.id_produto || row.id || Math.random();
+      const name = row.nome_sistema || row.nome || row.descricao || row.produto || row.titulo || row.name || 'Produto';
       const category = row.categoria || row.grupo || row.departamento || row.category || 'Produtos';
-      const price = Number(row.preco_venda ?? row.preco ?? row.valor ?? row.price ?? 0);
+      const price = Number(row.preco ?? row.preco_venda ?? row.valor ?? row.price ?? 0);
       const stock = row.estoque ?? row.saldo ?? row.quantidade ?? row.stock ?? 10;
       const image = row.imagem_url || row.foto || row.imagem || row.image || '';
-      return { id: String(row.id), name, category, price, stock, image, emoji: '🐾' };
+      return { id: String(id), name, category, price, stock, image, emoji: '🐾' };
     }
 
     async function loadCatalogFromCloud() {
       if (!sb) {
-        products = [...FALLBACK_PRODUCTS];
         document.getElementById('products-loading').classList.add('hidden');
-        renderCategories();
-        renderCatalog();
         return;
       }
 
       try {
-        // 1. Carrega configuração visual exclusiva do catálogo (catalogo_config)
         const { data: cfgRows } = await sb.from('catalogo_config').select('*').limit(1);
         if (cfgRows && cfgRows.length > 0) {
           const row = cfgRows[0];
@@ -379,21 +387,14 @@
           applyTheme();
         }
 
-        // 2. Carrega produtos da vitrine (catalogo_dom_jose)
         const { data: prodRows, error } = await sb.from('catalogo_dom_jose').select('*');
         if (!error && prodRows && prodRows.length > 0) {
           products = prodRows
-            .filter(r => r.ativo !== false && r.visivel !== false)
             .map(normalizeProductRow)
             .filter(p => p.price > 0);
         }
-
-        if (products.length === 0) {
-          products = [...FALLBACK_PRODUCTS];
-        }
       } catch (e) {
         console.error('Erro ao carregar catálogo:', e);
-        products = [...FALLBACK_PRODUCTS];
       } finally {
         document.getElementById('products-loading').classList.add('hidden');
         renderCategories();
@@ -418,12 +419,14 @@
     }
 
     function clearSearch() {
-      document.getElementById('catalog-search').value = '';
+      const s = document.getElementById('catalog-search');
+      if (s) s.value = '';
       renderCatalog();
     }
 
     function renderCatalog() {
-      const q = document.getElementById('catalog-search').value.trim().toLowerCase();
+      const searchEl = document.getElementById('catalog-search');
+      const q = (searchEl ? searchEl.value : '').trim().toLowerCase();
       document.getElementById('btn-clear-search').classList.toggle('hidden', !q);
 
       const filtered = products.filter(p => {
@@ -434,13 +437,17 @@
 
       const grid = document.getElementById('products-grid');
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full bg-white rounded-2xl p-8 text-center text-xs text-slate-500 border">Nenhum produto encontrado para "${q}".</div>`;
+        grid.innerHTML = `<div class="col-span-full bg-white rounded-2xl p-8 text-center text-xs text-slate-500 border space-y-2">
+          <p>Nenhum produto encontrado para "${q}".</p>
+          <button onclick="clearSearch()" class="px-3 py-1.5 rounded-lg brand-primary-bg text-xs font-bold">Mostrar todos os produtos</button>
+        </div>`;
         return;
       }
 
       grid.innerHTML = filtered.map(p => {
         const inCart = cart.find(item => item.id === p.id);
         const qty = inCart ? inCart.qty : 0;
+        const safeName = p.name.replace(/'/g, "\\'");
         return `
           <div class="bg-white rounded-2xl p-3 shadow-sm border-2 flex flex-col justify-between space-y-2.5" style="border-color: var(--brand-card-border);">
             <div>
@@ -450,7 +457,7 @@
               <span class="text-[10px] font-bold uppercase brand-primary-text block">${p.category}</span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-800 line-clamp-2 leading-snug mt-0.5">${p.name}</h3>
             </div>
-            <div class="pt-1 space-y-2">
+            <div class="pt-1 space-y-1.5">
               <div class="font-brand text-base sm:text-lg font-bold brand-accent-text">R$ ${formatMoney(p.price)}</div>
               ${qty === 0 ? `
                 <button onclick="addToCart('${p.id}')" class="w-full py-2 rounded-xl brand-primary-bg text-xs font-bold shadow-sm active:scale-95">
@@ -463,6 +470,9 @@
                   <button onclick="changeCartQty('${p.id}', 1)" class="w-7 h-7 rounded-lg brand-primary-bg font-bold text-sm">+</button>
                 </div>
               `}
+              <button onclick="openDirectWhatsApp('${safeName}')" class="w-full py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[11px] font-bold flex items-center justify-center gap-1">
+                <span>💬 Dúvidas no Zap</span>
+              </button>
             </div>
           </div>
         `;
@@ -500,12 +510,16 @@
       document.getElementById('modal-cart-total').textContent = `R$ ${formatMoney(totalVal)}`;
 
       const floatBar = document.getElementById('floating-cart-bar');
+      const floatWa = document.getElementById('floating-wa-btn');
+
       if (totalQty > 0) {
         floatBar.classList.remove('hidden');
         document.getElementById('float-cart-qty').textContent = `${totalQty} ${totalQty === 1 ? 'item' : 'itens'}`;
         document.getElementById('float-cart-total').textContent = `R$ ${formatMoney(totalVal)}`;
+        if (floatWa) floatWa.classList.replace('bottom-4', 'bottom-20');
       } else {
         floatBar.classList.add('hidden');
+        if (floatWa) floatWa.classList.replace('bottom-20', 'bottom-4');
       }
 
       const list = document.getElementById('cart-items-list');
@@ -592,14 +606,14 @@
         `👤 *Cliente:* ${name} (${phone})`;
 
       const storeWa = (catConfig.whatsapp || '5511919701433').replace(/\D/g, '');
-      window.open(`https://wa.me/${storeWa}?text=${encodeURIComponent(msg)}`, '_blank');
+      const fullWa = storeWa.startsWith('55') ? storeWa : '55' + storeWa;
+      window.open(`https://wa.me/${fullWa}?text=${encodeURIComponent(msg)}`, '_blank');
 
       cart = [];
       saveCart();
       closeCartModal();
     }
 
-    // ================= GESTÃO EXCLUSIVA DO CATÁLOGO (PIN) =================
     function openPinModal() {
       document.getElementById('pin-input').value = '';
       document.getElementById('pin-modal').classList.remove('hidden');
@@ -685,20 +699,6 @@
       alert('✅ Visual e configurações do catálogo salvos!');
     }
 
-    async function addManualProduct() {
-      const name = document.getElementById('new-prod-name').value.trim();
-      const category = document.getElementById('new-prod-cat').value.trim() || 'Produtos';
-      const price = parseFloat(document.getElementById('new-prod-price').value) || 0;
-      if (!name || price <= 0) return alert('Preencha nome e preço!');
-      if (sb) {
-        await sb.from('catalogo_dom_jose').insert({ nome: name, categoria: category, preco_venda: price, estoque: 10, ativo: true });
-      }
-      document.getElementById('new-prod-name').value = '';
-      document.getElementById('new-prod-price').value = '';
-      await loadCatalogFromCloud();
-      alert('✅ Produto publicado no catálogo!');
-    }
-
     async function loadCatalogOrdersAdmin() {
       const list = document.getElementById('adm-orders-list');
       if (!sb) return;
@@ -719,6 +719,15 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('catalog-search');
+      if (searchInput) searchInput.value = '';
+      setTimeout(() => {
+        if (searchInput && searchInput.value === '1234') {
+          searchInput.value = '';
+          renderCatalog();
+        }
+      }, 300);
+
       applyTheme();
       loadCatalogFromCloud();
     });
