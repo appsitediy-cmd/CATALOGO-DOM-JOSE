@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Recanto Petshop — Catálogo Jardim Dom José</title>
+  <meta name="description" content="Catálogo online com stock atualizado em tempo real da loja Recanto Petshop - Jardim Dom José. Peça pelo WhatsApp!" />
+  <style>
+    :root {
+      --primary: #15803d;
+      --primary-dark: #166534;
+      --primary-light: #dcfce7;
+      --accent: #f97316;
+      --accent-dark: #ea580c;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --whatsapp: #25d366;
+      --whatsapp-dark: #1ebe5d;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 14px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.16);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      padding-bottom: 96px;
+    }
+
+    /* Cabeçalho da Loja */
+    header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: #ffffff;
+      padding: 18px 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      box-shadow: var(--shadow-md);
+    }
+
+    .header-container {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .store-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .store-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .store-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: #ffffff;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .store-title h1 {
+      font-size: 1.12rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .store-title p {
+      font-size: 0.78rem;
+      opacity: 0.92;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-header-link {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 7px 11px;
+      border-radius: 10px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .btn-header-link:hover {
+      background: rgba(255, 255, 255, 0.26);
+    }
+
+    /* Barra de Pesquisa */
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--text-muted);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 40px 12px 40px;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: #94a3b8;
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 12px;
+      background: #e2e8f0;
+      color: #475569;
+      border: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-size: 12px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clear-search.visible {
+      display: flex;
+    }
+
+    /* Barra de Status e Filtros */
+    .main-container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 14px 16px;
+    }
+
+    .status-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+    }
+
+    .sort-select {
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Categorias Horizontais */
+    .categories-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      scrollbar-width: none;
+    }
+
+    .categories-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-pill {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .cat-pill.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(21, 128, 61, 0.28);
+    }
+
+    /* Grade de Produtos */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+    }
+
+    @media (min-width: 960px) {
+      .products-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .product-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .product-visual {
+      width: 100%;
+      height: 118px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #ffffff;
+    }
+
+    .product-emoji {
+      font-size: 2.3rem;
+      line-height: 1;
+    }
+
+    .product-unit-badge {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      background: rgba(15, 23, 42, 0.72);
+      color: #ffffff;
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .product-cat {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 3px;
+    }
+
+    .product-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.5em;
+      margin-bottom: 6px;
+    }
+
+    .product-stock {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .product-stock.low {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    .product-footer {
+      margin-top: auto;
+    }
+
+    .product-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .product-price small {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .btn-add {
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+
+    .btn-add:hover {
+      background: var(--primary-dark);
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--primary-light);
+      border: 1px solid #86efac;
+      border-radius: 10px;
+      padding: 4px;
+    }
+
+    .qty-btn {
+      width: 30px;
+      height: 28px;
+      border: none;
+      border-radius: 7px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qty-val {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    /* Barra Flutuante do Carrinho */
+    .cart-bar {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 24px);
+      max-width: 640px;
+      background: var(--primary-dark);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 13px 18px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-lg);
+      z-index: 50;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .cart-bar.visible {
+      display: flex;
+    }
+
+    .cart-bar-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cart-badge {
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .cart-bar-cta {
+      font-weight: 800;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Modal / Gaveta do Pedido */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      z-index: 60;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    @media (min-width: 640px) {
+      .modal-backdrop {
+        align-items: center;
+        padding: 16px;
+      }
+    }
+
+    .modal-sheet {
+      background: var(--surface);
+      width: 100%;
+      max-width: 540px;
+      max-height: 92vh;
+      border-radius: 20px 20px 0 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    @media (min-width: 640px) {
+      .modal-sheet {
+        border-radius: 20px;
+      }
+    }
+
+    .modal-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .btn-close {
+      background: #f1f5f9;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-item-title {
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .cart-item-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .form-section {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3px;
+      display: block;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--primary);
+    }
+
+    .delivery-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .toggle-opt {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .toggle-opt.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+    }
+
+    .modal-footer {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+      background: #f8fafc;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .btn-whatsapp {
+      width: 100%;
+      background: var(--whatsapp);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 0.98rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.32);
+    }
+
+    .btn-whatsapp:hover {
+      background: var(--whatsapp-dark);
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 44px 16px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .btn-load-more {
+      display: block;
+      margin: 20px auto 0;
+      background: var(--surface);
+      color: var(--primary-dark);
+      border: 1px solid var(--primary);
+      padding: 11px 24px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <div class="store-top">
+        <div class="store-brand">
+          <div class="store-logo">🐾</div>
+          <div class="store-title">
+            <h1>Recanto Petshop — Jardim Dom José</h1>
+            <p>Rua Lorena, 237 • Entrega rápida na região</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <a class="btn-header-link" href="https://appsidiediy-cmd.github.io/RECANTO-PET-SHOP-BT/" target="_blank" rel="noopener">🛁 Banho &amp; Tosa</a>
+          <a class="btn-header-link" href="https://wa.me/5511919701433?text=Ol%C3%A1!%20Vim%20pelo%20cat%C3%A1logo%20da%20loja%20Jardim%20Dom%20Jos%C3%A9." target="_blank" rel="noopener">💬 WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Buscar ração, petisco, antipulgas, areia..."
+          autocomplete="off"
+        />
+        <button id="clearSearchBtn" class="clear-search" title="Limpar busca">✕</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <div class="status-strip">
+      <div class="live-indicator">
+        <span class="pulse-dot"></span>
+        <span id="statusText">A carregar stock atualizado da loja...</span>
+      </div>
+      <div>
+        <select id="sortSelect" class="sort-select" aria-label="Ordenar produtos">
+          <option value="nome">Ordenar: A – Z</option>
+          <option value="menor_preco">Menor Preço</option>
+          <option value="maior_preco">Maior Preço</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="categoriesBar" class="categories-bar"></div>
+
+    <div id="productsGrid" class="products-grid">
+      <div class="empty-state">A sincronizar produtos disponíveis na loja Jardim Dom José...</div>
+    </div>
+
+    <button id="loadMoreBtn" class="btn-load-more" style="display: none;">Carregar mais produtos</button>
+  </main>
+
+  <!-- Barra Flutuante do Carrinho -->
+  <div id="cartBar" class="cart-bar" role="button" tabindex="0">
+    <div class="cart-bar-info">
+      <span id="cartCountBadge" class="cart-badge">0</span>
+      <div>
+        <div style="font-size: 0.74rem; opacity: 0.9;">Seu pedido</div>
+        <div id="cartBarTotal" style="font-weight: 800; font-size: 0.98rem;">R$ 0,00</div>
+      </div>
+    </div>
+    <div class="cart-bar-cta">Ver Sacola →</div>
+  </div>
+
+  <!-- Modal Finalizar Pedido -->
+  <div id="cartModal" class="modal-backdrop">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h2>🛒 Finalizar Pedido — Dom José</h2>
+        <button id="closeModalBtn" class="btn-close" aria-label="Fechar">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="cartItemsList"></div>
+
+        <div class="form-section">
+          <div>
+            <label class="form-label">Como deseja receber?</label>
+            <div class="delivery-toggle">
+              <button type="button" class="toggle-opt active" data-mode="Entrega">🛵 Entrega em Casa</button>
+              <button type="button" class="toggle-opt" data-mode="Retirada">🏪 Retirar na Loja</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label" for="clientName">Seu Nome *</label>
+            <input type="text" id="clientName" class="form-input" placeholder="Ex: Maria Silva" />
+          </div>
+
+          <div id="addressGroup">
+            <label class="form-label" for="clientAddress">Endereço para Entrega *</label>
+            <input type="text" id="clientAddress" class="form-input" placeholder="Rua, número, complemento e bairro" />
+          </div>
+
+          <div>
+            <label class="form-label" for="paymentMethod">Forma de Pagamento</label>
+            <select id="paymentMethod" class="form-select">
+              <option value="Pix">Pix</option>
+              <option value="Cartão de Crédito / Débito">Cartão (levamos a maquininha)</option>
+              <option value="Dinheiro">Dinheiro</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="total-row">
+          <span>Total estimado:</span>
+          <span id="modalTotalValue">R$ 0,00</span>
+        </div>
+        <button id="sendWhatsappBtn" class="btn-whatsapp">
+          <span>📲 Enviar Pedido no WhatsApp</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://oqhbbixhvdpychcogigh.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_AFek0CJUPD4ONBOpeL518Q_H8gEGuTS";
+    const WHATSAPP_LOJA = "5511919701433";
+
+    let allProducts = [];
+    let filteredProducts = [];
+    let selectedCategory = "TODOS";
+    let visibleLimit = 40;
+    let deliveryMode = "Entrega";
+    let cart = JSON.parse(localStorage.getItem("recanto_cart_dom_jose") || "{}");
+
+    const formatBRL = (val) =>
+      Number(val || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+    const normalizeText = (str) =>
+      (str || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+    function getCategoryEmoji(cat, name) {
+      const text = normalizeText(`${cat} ${name}`);
+      if (text.includes("gato") || text.includes("felin") || text.includes("areia") || text.includes("whiskas") || text.includes("friskies")) return "🐱";
+      if (text.includes("petisco") || text.includes("osso") || text.includes("biscoito") || text.includes("sache")) return "🦴";
+      if (text.includes("medic") || text.includes("antipulga") || text.includes("vermif") || text.includes("simparic") || text.includes("credeli")) return "💊";
+      if (text.includes("banho") || text.includes("shampoo") || text.includes("higiene") || text.includes("tapete")) return "🧼";
+      if (text.includes("brinquedo") || text.includes("coleira") || text.includes("guia") || text.includes("cama")) return "🎾";
+      if (text.includes("ave") || text.includes("passaro") || text.includes("calopsita")) return "🦜";
+      return "🐶";
+    }
+
+    function saveCart() {
+      localStorage.setItem("recanto_cart_dom_jose", JSON.stringify(cart));
+      updateCartUI();
+    }
+
+    function addToCart(id) {
+      const prod = allProducts.find((p) => p.id_produto === id);
+      if (!prod) return;
+      const currentQty = cart[id] ? cart[id].qty : 0;
+      if (currentQty + 1 > Math.floor(prod.estoque)) {
+        alert(`Temos ${Math.floor(prod.estoque)} unidade(s) disponíveis em stock no momento.`);
+        return;
+      }
+      cart[id] = {
+        id_produto: prod.id_produto,
+        nome: prod.nome,
+        preco: Number(prod.preco),
+        unidade: prod.unidade || "UN",
+        qty: currentQty + 1,
+      };
+      saveCart();
+      renderProducts();
+    }
+
+    function changeQty(id, delta) {
+      if (!cart[id]) return;
+      const prod = allProducts.find((p) => p.id_produto === id);
+      const nextQty = cart[id].qty + delta;
+      if (nextQty <= 0) {
+        delete cart[id];
+      } else if (prod && nextQty > Math.floor(prod.estoque)) {
+        alert(`Limite de stock disponível: ${Math.floor(prod.estoque)} un.`);
+        return;
+      } else {
+        cart[id].qty = nextQty;
+      }
+      saveCart();
+      renderProducts();
+      renderCartModal();
+    }
+
+    function updateCartUI() {
+      const items = Object.values(cart);
+      const totalItems = items.reduce((acc, item) => acc + item.qty, 0);
+      const totalPrice = items.reduce((acc, item) => acc + item.qty * item.preco, 0);
+
+      const bar = document.getElementById("cartBar");
+      document.getElementById("cartCountBadge").textContent = totalItems;
+      document.getElementById("cartBarTotal").textContent = formatBRL(totalPrice);
+      document.getElementById("modalTotalValue").textContent = formatBRL(totalPrice);
+
+      if (totalItems > 0) {
+        bar.classList.add("visible");
+      } else {
+        bar.classList.remove("visible");
+      }
+    }
+
+    function buildCategories() {
+      const counts = {};
+      allProducts.forEach((p) => {
+        const c = (p.categoria || "GERAL").toUpperCase();
+        counts[c] = (counts[c] || 0) + 1;
+      });
+
+      const sortedCats = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+      const bar = document.getElementById("categoriesBar");
+      bar.innerHTML = "";
+
+      const allPill = document.createElement("button");
+      allPill.className = `cat-pill ${selectedCategory === "TODOS" ? "active" : ""}`;
+      allPill.textContent = `Todos (${allProducts.length})`;
+      allPill.onclick = () => {
+        selectedCategory = "TODOS";
+        visibleLimit = 40;
+        buildCategories();
+        applyFilters();
+      };
+      bar.appendChild(allPill);
+
+      sortedCats.forEach((cat) => {
+        const btn = document.createElement("button");
+        btn.className = `cat-pill ${selectedCategory === cat ? "active" : ""}`;
+        btn.textContent = `${cat} (${counts[cat]})`;
+        btn.onclick = () => {
+          selectedCategory = cat;
+          visibleLimit = 40;
+          buildCategories();
+          applyFilters();
+        };
+        bar.appendChild(btn);
+      });
+    }
+
+    function applyFilters() {
+      const term = normalizeText(document.getElementById("searchInput").value.trim());
+      const sortBy = document.getElementById("sortSelect").value;
+
+      filteredProducts = allProducts.filter((p) => {
+        const matchesCat =
+          selectedCategory === "TODOS" ||
+          (p.categoria || "GERAL").toUpperCase() === selectedCategory;
+        const matchesSearch =
+          !term ||
+          normalizeText(p.nome).includes(term) ||
+          normalizeText(p.categoria).includes(term) ||
+          String(p.codigo_barras || "").includes(term);
+        return matchesCat && matchesSearch;
+      });
+
+      if (sortBy === "menor_preco") {
+        filteredProducts.sort((a, b) => Number(a.preco) - Number(b.preco));
+      } else if (sortBy === "maior_preco") {
+        filteredProducts.sort((a, b) => Number(b.preco) - Number(a.preco));
+      } else {
+        filteredProducts.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+      }
+
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById("productsGrid");
+      const loadMoreBtn = document.getElementById("loadMoreBtn");
+      const slice = filteredProducts.slice(0, visibleLimit);
+
+      if (slice.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🔍</div>
+            <strong>Nenhum produto encontrado.</strong>
+            <p style="font-size: 0.84rem; margin-top: 4px;">Tente outro termo ou fale connosco direto no WhatsApp.</p>
+          </div>`;
+        loadMoreBtn.style.display = "none";
+        return;
+      }
+
+      grid.innerHTML = slice
+        .map((p) => {
+          const inCart = cart[p.id_produto];
+          const estoqueInt = Math.floor(Number(p.estoque));
+          const isLow = estoqueInt > 0 && estoqueInt <= 5;
+          const emoji = getCategoryEmoji(p.categoria, p.nome);
+
+          const visualHtml = p.imagem_url
+            ? `<img src="${p.imagem_url}" alt="${p.nome}" loading="lazy" onerror="this.remove()" />`
+            : `<span class="product-emoji">${emoji}</span>`;
+
+          const actionHtml = inCart
+            ? `<div class="qty-control">
+                 <button class="qty-btn" onclick="changeQty(${p.id_produto}, -1)">−</button>
+                 <span class="qty-val">${inCart.qty}</span>
+                 <button class="qty-btn" onclick="changeQty(${p.id_produto}, 1)">+</button>
+               </div>`
+            : `<button class="btn-add" onclick="addToCart(${p.id_produto})">+ Adicionar</button>`;
+
+          return `
+            <article class="product-card">
+              <div>
+                <div class="product-visual">
+                  ${visualHtml}
+                  <span class="product-unit-badge">${p.unidade || "UN"}</span>
+                </div>
+                <div class="product-cat">${p.categoria || "PET SHOP"}</div>
+                <h3 class="product-name" title="${p.nome}">${p.nome}</h3>
+                <div class="product-stock ${isLow ? "low" : ""}">
+                  ${isLow ? `⚡ Últimas ${estoqueInt} un. na loja` : `✅ Disponível (${estoqueInt} un.)`}
+                </div>
+              </div>
+              <div class="product-footer">
+                <div class="product-price">${formatBRL(p.preco)}</div>
+                ${actionHtml}
+              </div>
+            </article>`;
+        })
+        .join("");
+
+      loadMoreBtn.style.display = filteredProducts.length > visibleLimit ? "block" : "none";
+    }
+
+    function renderCartModal() {
+      const container = document.getElementById("cartItemsList");
+      const items = Object.values(cart);
+
+      if (items.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color: var(--text-muted); padding: 20px 0;">A sua sacola está vazia.</p>`;
+        return;
+      }
+
+      container.innerHTML = items
+        .map(
+          (item) => `
+          <div class="cart-item">
+            <div>
+              <div class="cart-item-title">${item.nome}</div>
+              <div class="cart-item-sub">${item.qty}x ${formatBRL(item.preco)} = <strong>${formatBRL(item.qty * item.preco)}</strong></div>
+            </div>
+            <div class="qty-control" style="width: 96px; flex-shrink: 0;">
+              <button class="qty-btn" onclick="changeQty(${item.id_produto}, -1)">−</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${item.id_produto}, 1)">+</button>
+            </div>
+          </div>`
+        )
+        .join("");
+    }
+
+    async function loadCatalog() {
+      try {
+        const url = `${SUPABASE_URL}/rest/v1/catalogo_dom_jose?select=id_produto,codigo_barras,nome,categoria,unidade,preco,estoque,ativo,imagem_url,atualizado_em&ativo=eq.true&estoque=gt.0&preco=gt.0&order=nome.asc&limit=2000`;
+        const res = await fetch(url, {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Falha ao consultar catálogo");
+        allProducts = await res.json();
+
+        const statusEl = document.getElementById("statusText");
+        if (allProducts.length > 0) {
+          const latest = allProducts.reduce((max, p) =>
+            p.atualizado_em > max ? p.atualizado_em : max,
+            allProducts[0].atualizado_em
+          );
+          const hora = latest
+            ? new Date(latest).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })
+            : "";
+          statusEl.textContent = `${allProducts.length} produtos disponíveis • Atualizado às ${hora}`;
+        } else {
+          statusEl.textContent = "A sincronizar produtos da loja...";
+        }
+
+        buildCategories();
+        applyFilters();
+        updateCartUI();
+      } catch (err) {
+        document.getElementById("statusText").textContent = "Erro ao carregar catálogo. Atualize a página.";
+        document.getElementById("productsGrid").innerHTML = `
+          <div class="empty-state">
+            <strong>Não foi possível carregar os produtos agora.</strong>
+            <p style="margin-top:6px;">Toque para tentar novamente ou chame no WhatsApp (11) 91970-1433.</p>
+          </div>`;
+      }
+    }
+
+    // Eventos de Interface
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      document.getElementById("clearSearchBtn").classList.toggle("visible", e.target.value.length > 0);
+      visibleLimit = 40;
+      applyFilters();
+    });
+
+    document.getElementById("clearSearchBtn").addEventListener("click", () => {
+      const inp = document.getElementById("searchInput");
+      inp.value = "";
+      document.getElementById("clearSearchBtn").classList.remove("visible");
+      applyFilters();
+      inp.focus();
+    });
+
+    document.getElementById("sortSelect").addEventListener("change", applyFilters);
+
+    document.getElementById("loadMoreBtn").addEventListener("click", () => {
+      visibleLimit += 40;
+      renderProducts();
+    });
+
+    document.getElementById("cartBar").addEventListener("click", () => {
+      renderCartModal();
+      document.getElementById("cartModal").classList.add("open");
+    });
+
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+      document.getElementById("cartModal").classList.remove("open");
+    });
+
+    document.getElementById("cartModal").addEventListener("click", (e) => {
+      if (e.target.id === "cartModal") {
+        document.getElementById("cartModal").classList.remove("open");
+      }
+    });
+
+    document.querySelectorAll(".toggle-opt").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".toggle-opt").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        deliveryMode = btn.dataset.mode;
+        document.getElementById("addressGroup").style.display =
+          deliveryMode === "Entrega" ? "block" : "none";
+      });
+    });
+
+    document.getElementById("sendWhatsappBtn").addEventListener("click", () => {
+      const items = Object.values(cart);
+      if (items.length === 0) return;
+
+      const name = document.getElementById("clientName").value.trim();
+      const address = document.getElementById("clientAddress").value.trim();
+      const payment = document.getElementById("paymentMethod").value;
+
+      if (!name) {
+        alert("Por favor, informe o seu nome.");
+        document.getElementById("clientName").focus();
+        return;
+      }
+
+      if (deliveryMode === "Entrega" && !address) {
+        alert("Por favor, informe o endereço para entrega.");
+        document.getElementById("clientAddress").focus();
+        return;
+      }
+
+      const total = items.reduce((acc, i) => acc + i.qty * i.preco, 0);
+      const linhasItens = items
+        .map((i) => `• ${i.qty}x ${i.nome} — ${formatBRL(i.qty * i.preco)}`)
+        .join("\n");
+
+      const textoMensagem =
+        `🐾 *NOVO PEDIDO — CATÁLOGO JARDIM DOM JOSÉ*\n\n` +
+        `*Cliente:* ${name}\n` +
+        `*Modalidade:* ${deliveryMode === "Entrega" ? "🛵 Entrega em Casa" : "🏪 Retirada na Loja (Rua Lorena, 237)"}\n` +
+        (deliveryMode === "Entrega" ? `*Endereço:* ${address}\n` : "") +
+        `*Pagamento:* ${payment}\n\n` +
+        `*Itens do Pedido:*\n${linhasItens}\n\n` +
+        `*Total Estimado:* ${formatBRL(total)}`;
+
+      const urlWhats = `https://wa.me/${WHATSAPP_LOJA}?text=${encodeURIComponent(textoMensagem)}`;
+      window.open(urlWhats, "_blank", "noopener");
+    });
+
+    loadCatalog();
+  </script>
+</body>
+</html>
