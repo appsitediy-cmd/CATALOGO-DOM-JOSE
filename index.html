@@ -36,7 +36,7 @@
   <!-- Cabeçalho -->
   <header class="bg-white shadow-sm sticky top-1.5 z-40 h-16 flex items-center border-b" style="border-color: var(--brand-card-border);">
     <div class="max-w-4xl w-full mx-auto px-4 flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2.5 h-12" onclick="goHome()" style="cursor:pointer;">
+      <div class="flex items-center gap-2.5 h-12" onclick="goHome()" style="cursor:pointer;" title="Início">
         <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center shadow-sm shrink-0" style="border-color: var(--brand-primary); background-color: var(--brand-card-bg);">
           <span class="font-brand text-xl font-bold leading-none brand-primary-text" id="header-logo-letter">R</span>
         </div>
@@ -89,11 +89,13 @@
         </button>
       </div>
 
-      <!-- Cabeçalho de Espécie (Quando clicado) -->
+      <!-- Cabeçalho de Espécie (Quando clicado) COM BOTÃO "VOLTAR" -->
       <div id="especie-header" class="hidden items-center justify-between bg-slate-900 text-white p-3.5 rounded-2xl shadow-sm">
-        <div class="flex items-center gap-2">
-          <button onclick="goHome()" class="bg-white/20 hover:bg-white/30 p-1.5 rounded-lg text-sm">⬅️</button>
-          <h2 class="font-brand text-lg font-bold" id="especie-title">🐶 Cães</h2>
+        <div class="flex items-center gap-3">
+          <button onclick="goHome()" class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 active:scale-95 transition-all">
+            <span>⬅️</span> <span>Voltar</span>
+          </button>
+          <h2 class="font-brand text-lg font-bold border-l border-white/20 pl-3" id="especie-title">🐶 Cães</h2>
         </div>
       </div>
 
@@ -107,7 +109,7 @@
       <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
     </section>
 
-    <!-- PAINEL LOJISTA (Mesmo de antes) -->
+    <!-- PAINEL LOJISTA -->
     <section id="view-catalog-admin" class="hidden space-y-4">
       <div class="bg-slate-900 text-white rounded-2xl p-4 flex items-center justify-between">
         <div>
@@ -147,12 +149,12 @@
 
   <div id="floating-cart-bar" class="hidden fixed bottom-3 left-3 right-3 max-w-4xl mx-auto z-40">
     <button onclick="openCartModal()" class="w-full py-3.5 px-5 rounded-2xl bg-slate-900 text-white shadow-xl flex items-center justify-between">
-      <div class="flex items-center gap-2"><span class="px-2.5 py-1 rounded-lg brand-accent-bg text-xs font-extrabold" id="float-cart-qty">0 itens</span><span class="text-xs font-semibold text-slate-300">Ver Sacola e Finalizar</span></div>
+      <div class="flex items-center gap-2"><span class="px-2.5 py-1 rounded-lg brand-accent-bg text-xs font-extrabold" id="float-cart-qty">0 itens</span><span class="text-xs font-semibold text-slate-300">Ver Sacola</span></div>
       <span class="font-brand text-lg font-bold text-[#FDD815]" id="float-cart-total">R$ 0,00</span>
     </button>
   </div>
 
-  <!-- MODAIS MANTIDOS IGUAIZINHOS AO ANTERIOR (SACOLA E PIN) -->
+  <!-- MODAIS SACOLA E PIN -->
   <div id="cart-modal" class="fixed inset-0 bg-black/65 z-50 hidden items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
       <div class="p-4 border-b border-slate-100 flex items-center justify-between shrink-0"><h3 class="font-brand text-lg font-bold text-slate-800">🛒 Sua Sacola</h3><button onclick="closeCartModal()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-xs font-bold text-slate-600">✕</button></div>
@@ -202,11 +204,11 @@
       storeName: 'Recanto Petshop — Unidade Jardim Dom José', whatsapp: '5511919701433', address: 'Rua Lorena, 237 - Jardim Dom José, Embu das Artes - SP', pin: '1234'
     };
 
-    let products = JSON.parse(localStorage.getItem('recanto_cat_cache_v3')) || [];
+    let products = JSON.parse(localStorage.getItem('recanto_cat_cache_v4')) || [];
     let cart = JSON.parse(localStorage.getItem('recanto_cat_cart_v1') || '[]');
     
     // VARIÁVEIS DE NAVEGAÇÃO UX
-    let currentEspecie = null; // null = Home
+    let currentEspecie = null; 
     let currentSubcategoria = 'Todas';
     let deliveryType = 'Entrega';
 
@@ -236,7 +238,7 @@
 
     function formatMoney(v) { return (Number(v) || 0).toFixed(2).replace('.', ','); }
 
-    // ALGORITMO DE CLASSIFICAÇÃO AUTOMÁTICA
+    // ALGORITMO DE CLASSIFICAÇÃO AUTOMÁTICA BLINDADO
     function autoTagProduct(row) {
       const id = row.id_produto || row.cod_produto || Math.random();
       const name = String(row.nome || '').trim();
@@ -247,29 +249,32 @@
       const n = name.toLowerCase();
       const c = catSaurus.toLowerCase();
 
-      // 1. Definir Espécie Principal
-      let esp = 'Outros';
-      if (n.includes('gato') || n.includes('feline') || n.includes('sache') || n.includes('areia') || c.includes('gato')) {
+      // 1. ESPÉCIE PRINCIPAL (Cães é o padrão se a palavra não for exclusiva de gato/pássaro)
+      let esp = 'Cães'; 
+      
+      // Filtros ultra-fortes de Gatos
+      if (n.includes('gato') || n.includes('feline') || n.includes('areia') || n.includes('sílica') || n.includes('silica') || c.includes('gato')) {
         esp = 'Gatos';
-      } else if (n.includes('cão') || n.includes('cães') || n.includes('caes') || n.includes('cachorro') || n.includes('canin') || c.includes('cães')) {
-        esp = 'Cães';
-      } else if (n.includes('passaro') || n.includes('pássaro') || n.includes('calopsita') || n.includes('periquito') || n.includes('canario') || n.includes('alpiste') || n.includes('painco') || n.includes('girassol') || n.includes('pixarro') || n.includes('granel')) {
+      } 
+      // Filtros ultra-fortes de Pássaros & Roedores
+      else if (n.includes('passaro') || n.includes('pássaro') || n.includes('calopsita') || n.includes('periquito') || n.includes('canario') || n.includes('curio') || n.includes('coleir') || n.includes('papagaio') || n.includes('alpiste') || n.includes('painco') || n.includes('girassol') || n.includes('pixarro') || n.includes('semente') || n.includes('aveia') || n.includes('mistura') || n.includes('granel') || n.includes('hamster') || n.includes('roedor') || n.includes('coelho')) {
         esp = 'Pássaros & Roedores';
       }
-      
-      // Farmácia rouba a prioridade se for medicamento cruzado
-      if (n.includes('simparic') || n.includes('credeli') || n.includes('bravecto') || n.includes('nexgard') || n.includes('vermifugo')) {
+
+      // Farmácia rouba a prioridade de qualquer espécie (Simparic, etc)
+      if (n.includes('simparic') || n.includes('credeli') || n.includes('bravecto') || n.includes('nexgard') || n.includes('capstar') || n.includes('vermifugo') || n.includes('drontal') || n.includes('carrapato') || n.includes('pulga') || n.includes('sarna') || n.includes('antimicrobiano') || n.includes('anti-inflamatorio') || c.includes('farmacia') || c.includes('medicamento')) {
         esp = 'Farmácia';
       }
 
-      // 2. Definir Subcategoria
+      // 2. SUBCATEGORIAS MAIS INTELIGENTES
       let sub = 'Diversos';
-      if (n.includes('racao') || n.includes('ração') || n.includes('granel') || n.includes('mistura') || c.includes('alimento') || n.includes('sache')) sub = 'Rações e Alimentos';
-      else if (n.includes('petisco') || n.includes('bifinho') || n.includes('osso') || n.includes('biscoito')) sub = 'Petiscos';
-      else if (n.includes('areia') || n.includes('silica') || n.includes('sílica') || n.includes('granulado') || n.includes('tapete higienico')) sub = 'Higiene e Areias';
-      else if (n.includes('shampoo') || n.includes('condicionador') || n.includes('colonia') || n.includes('banho')) sub = 'Estética e Banho';
-      else if (n.includes('simparic') || n.includes('credeli') || n.includes('bravecto') || n.includes('carrapato') || n.includes('pulga') || n.includes('vermifugo')) sub = 'Antipulgas e Remédios';
-      else if (n.includes('brinquedo') || n.includes('bolinha') || n.includes('coleira') || n.includes('guia') || n.includes('peitoral')) sub = 'Acessórios';
+      if (n.includes('sache') || n.includes('sachê') || n.includes('pate') || n.includes('patê') || n.includes('lata')) sub = 'Sachês e Úmidos';
+      else if (n.includes('racao') || n.includes('ração') || n.includes('granel') || n.includes('mistura') || n.includes('alpiste') || n.includes('semente')) sub = 'Rações e Alimentos';
+      else if (n.includes('petisco') || n.includes('bifinho') || n.includes('osso') || n.includes('biscoito') || n.includes('snack')) sub = 'Petiscos e Ossos';
+      else if (n.includes('areia') || n.includes('silica') || n.includes('sílica') || n.includes('granulado') || n.includes('tapete') || n.includes('fralda')) sub = 'Higiene e Limpeza';
+      else if (n.includes('shampoo') || n.includes('condicionador') || n.includes('colonia') || n.includes('banho') || n.includes('sabonete')) sub = 'Estética e Banho';
+      else if (esp === 'Farmácia' || n.includes('remedio') || n.includes('remédio')) sub = 'Medicamentos';
+      else if (n.includes('brinquedo') || n.includes('bolinha') || n.includes('coleira') || n.includes('guia') || n.includes('peitoral') || n.includes('cama') || n.includes('comedouro')) sub = 'Acessórios';
 
       return { id: String(id), name, category: catSaurus, _especie: esp, _subcategoria: sub, price, image, emoji: '🐾' };
     }
@@ -283,7 +288,7 @@
           const parsed = data.map(autoTagProduct).filter(p => p.price > 0);
           if (parsed.length > 0) {
             products = parsed;
-            localStorage.setItem('recanto_cat_cache_v3', JSON.stringify(products));
+            localStorage.setItem('recanto_cat_cache_v4', JSON.stringify(products)); // Cache novo (v4) forçado
             renderStorefront();
           }
         }
@@ -301,7 +306,7 @@
     function selectEspecie(esp) {
       currentEspecie = esp;
       currentSubcategoria = 'Todas';
-      document.getElementById('catalog-search').value = ''; // Limpa busca ao entrar
+      document.getElementById('catalog-search').value = ''; 
       renderStorefront();
     }
 
@@ -325,10 +330,8 @@
       const elGridTitle = document.getElementById('grid-title');
       const grid = document.getElementById('products-grid');
 
-      // Atualiza placeholder
       document.getElementById('catalog-search').placeholder = currentEspecie ? `Buscar em ${currentEspecie}...` : 'Buscar produtos...';
 
-      // LÓGICA DE EXIBIÇÃO: Se estiver buscando na Home, oculta botões grandes
       if (currentEspecie === null && !q) {
         elEspecies.classList.remove('hidden');
         elEspecieHeader.classList.add('hidden');
@@ -348,12 +351,10 @@
         }
       }
 
-      // FILTRAGEM DOS PRODUTOS
       let filtered = products;
       if (currentEspecie) {
         filtered = filtered.filter(p => p._especie === currentEspecie);
         
-        // Renderiza subcategorias dinâmicas daquela espécie
         const subs = ['Todas', ...new Set(filtered.map(p => p._subcategoria).filter(Boolean))];
         elSubcatBar.innerHTML = subs.map(s => {
           const active = currentSubcategoria === s;
@@ -368,7 +369,6 @@
       if (q) {
         filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p._subcategoria.toLowerCase().includes(q));
       } else if (currentEspecie === null) {
-        // Se estiver na Home sem buscar nada, mostra só uns 6 destaques aleatórios para não ficar vazio
         filtered = filtered.slice(0, 6);
       }
 
@@ -398,7 +398,6 @@
       }).join('');
     }
 
-    // CARRINHO E PEDIDOS (Lógica Mantida)
     function addToCart(prodId) {
       const p = products.find(x => x.id === prodId);
       if (!p) return;
@@ -420,25 +419,17 @@
       const totalVal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
       document.getElementById('header-cart-count').textContent = totalQty;
       document.getElementById('modal-cart-total').textContent = `R$ ${formatMoney(totalVal)}`;
-
       const floatBar = document.getElementById('floating-cart-bar');
       const floatWa = document.getElementById('floating-wa-btn');
-
       if (totalQty > 0) {
-        floatBar.classList.remove('hidden');
-        document.getElementById('float-cart-qty').textContent = `${totalQty} itens`;
-        document.getElementById('float-cart-total').textContent = `R$ ${formatMoney(totalVal)}`;
+        floatBar.classList.remove('hidden'); document.getElementById('float-cart-qty').textContent = `${totalQty} itens`; document.getElementById('float-cart-total').textContent = `R$ ${formatMoney(totalVal)}`;
         if (floatWa) floatWa.classList.replace('bottom-4', 'bottom-20');
       } else {
-        floatBar.classList.add('hidden');
-        if (floatWa) floatWa.classList.replace('bottom-20', 'bottom-4');
+        floatBar.classList.add('hidden'); if (floatWa) floatWa.classList.replace('bottom-20', 'bottom-4');
       }
-
-      const list = document.getElementById('cart-items-list');
-      const form = document.getElementById('cart-checkout-form');
+      const list = document.getElementById('cart-items-list'); const form = document.getElementById('cart-checkout-form');
       if (cart.length === 0) {
-        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Sua sacola está vazia.</p>`;
-        form.classList.add('hidden');
+        list.innerHTML = `<p class="text-center py-6 text-xs text-slate-400">Sua sacola está vazia.</p>`; form.classList.add('hidden');
       } else {
         form.classList.remove('hidden');
         list.innerHTML = cart.map(item => `
@@ -461,25 +452,13 @@
 
     async function submitCatalogOrder() {
       if (cart.length === 0) return alert('Adicione pelo menos 1 produto!');
-      const name = document.getElementById('cli-name').value.trim();
-      const phone = document.getElementById('cli-phone').value.trim();
-      const address = document.getElementById('cli-address').value.trim();
-      const payment = document.getElementById('cli-payment').value;
-      if (!name || !phone) return alert('Preencha seu nome e WhatsApp!');
-      if (deliveryType === 'Entrega' && !address) return alert('Informe o endereço!');
-
+      const name = document.getElementById('cli-name').value.trim(); const phone = document.getElementById('cli-phone').value.trim(); const address = document.getElementById('cli-address').value.trim(); const payment = document.getElementById('cli-payment').value;
+      if (!name || !phone) return alert('Preencha seu nome e WhatsApp!'); if (deliveryType === 'Entrega' && !address) return alert('Informe o endereço!');
       const totalVal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-      if (sb) {
-        await sb.from('catalogo_pedidos').insert({
-          cliente_nome: name, cliente_telefone: phone, cliente_endereco: deliveryType === 'Entrega' ? address : 'Retirada na loja',
-          itens: cart, total: totalVal, forma_pagamento: payment, tipo_entrega: deliveryType, status: 'PENDENTE'
-        });
-      }
-
+      if (sb) { await sb.from('catalogo_pedidos').insert({ cliente_nome: name, cliente_telefone: phone, cliente_endereco: deliveryType === 'Entrega' ? address : 'Retirada na loja', itens: cart, total: totalVal, forma_pagamento: payment, tipo_entrega: deliveryType, status: 'PENDENTE' }); }
       const itemsLines = cart.map(i => `• ${i.qty}x ${i.name} — R$ ${formatMoney(i.price * i.qty)}`).join('\n');
       const msg = `Olá, *${catConfig.storeName}*! 🐾 Pedido pelo Catálogo:\n\n${itemsLines}\n\n💰 *Total: R$ ${formatMoney(totalVal)}*\n💳 *Pagamento:* ${payment}\n📦 *Modalidade:* ${deliveryType}${deliveryType === 'Entrega' ? `\n📍 *Endereço:* ${address}` : ''}\n👤 *Cliente:* ${name} (${phone})`;
-      const storeWa = (catConfig.whatsapp || '5511919701433').replace(/\D/g, '');
-      window.open(`https://wa.me/55${storeWa.replace(/^55/, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+      const storeWa = (catConfig.whatsapp || '5511919701433').replace(/\D/g, ''); window.open(`https://wa.me/55${storeWa.replace(/^55/, '')}?text=${encodeURIComponent(msg)}`, '_blank');
       cart = []; saveCart(); closeCartModal();
     }
 
