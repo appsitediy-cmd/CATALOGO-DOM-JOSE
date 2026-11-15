@@ -200,17 +200,18 @@
     const SUPABASE_KEY = 'sb_publishable_AFek0CJUPD4ONBOpeL518Q_H8gEGuTS';
     const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
-    // Limpa caches antigos para garantir que a separação nova rode na hora
+    // Limpa caches antigos para forçar o novo motor de classificação
     localStorage.removeItem('recanto_cat_cache_v2');
     localStorage.removeItem('recanto_cat_cache_v3');
     localStorage.removeItem('recanto_cat_cache_v4');
     localStorage.removeItem('recanto_cat_cache_v5');
+    localStorage.removeItem('recanto_cat_cache_v6');
 
     let catConfig = JSON.parse(localStorage.getItem('recanto_cat_cfg_v1')) || {
       storeName: 'Recanto Petshop — Unidade Jardim Dom José', whatsapp: '5511919701433', address: 'Rua Lorena, 237 - Jardim Dom José, Embu das Artes - SP', pin: '1234'
     };
 
-    let products = JSON.parse(localStorage.getItem('recanto_cat_cache_v6')) || [];
+    let products = JSON.parse(localStorage.getItem('recanto_cat_cache_v7')) || [];
     let cart = JSON.parse(localStorage.getItem('recanto_cat_cart_v1') || '[]');
     
     let currentEspecie = null; 
@@ -250,7 +251,7 @@
         .toLowerCase();
     }
 
-    // MOTOR DE CLASSIFICAÇÃO PET SHOP 100% REVISADO
+    // MOTOR DE CLASSIFICAÇÃO BLINDADO
     function autoTagProduct(row) {
       const id = row.id_produto || row.cod_produto || Math.random();
       const name = String(row.nome || '').trim();
@@ -261,29 +262,29 @@
       const texto = norm(`${name} ${catSaurus}`);
 
       // 1. Detectar Farmácia / Antipulgas / Medicamentos
-      const isFarmacia = /\b(simparic|credeli|bravecto|nexgard|frontline|advocate|advantage|revolution|vectra|capstar|fiprolex|fipronil|pulgoff|vermifugo|drontal|endogard|chemital|basken|vermivet|petzi|canex|helmiben|giardicid|metronidazol|doxiciclina|cefalexina|amoxicilina|enrofloxacino|prednisolona|meloxicam|maxicam|flamavet|gaviz|omeprazol|cerenia|apoquel|otoguard|natalene|otodem|auritop|posatex|colirio|unguento|bactrovet|bicheira|rifocina|vetaglos|cicatrizante|clorexidina|cetoconazol|sarna|sarniran|tiuran|amitraz|triatox|butox|k-othrine|antipulga|antipulgas|carrapaticida|carrapato|pulga|medicamento|medicamentos|farmacia|remedio|antibiotico|suplemento|organew|hemolitan|glicopan|peloderme|condroton|regenera|colar elizabetano)\b/.test(texto);
+      const isFarmacia = /\b(simparic|credeli|bravecto|nexgard|frontline|advocate|advantage|revolution|vectra|capstar|fiprolex|fipronil|pulgoff|vermifugo|drontal|endogard|chemital|basken|vermivet|petzi|canex|helmiben|giardicid|metronidazol|doxiciclina|cefalexina|amoxicilina|enrofloxacino|prednisolona|meloxicam|maxicam|flamavet|gaviz|omeprazol|cerenia|apoquel|otoguard|natalene|otodem|auritop|posatex|colirio|unguento|bactrovet|bicheira|rifocina|vetaglos|cicatrizante|clorexidina|cetoconazol|sarna|sarniran|tiuran|amitraz|triatox|butox|k-othrine|antipulga|antipulgas|carrapaticida|carrapato|pulga|medicamento|medicamentos|farmacia|remedio|antibiotico|suplemento|organew|hemolitan|glicopan|peloderme|condroton|regenera|agemoxi|colar elizabetano)\b/.test(texto);
 
-      // 2. Detectar Cães e Gatos (palavras, abreviações como CAT/GAT/CASTRADO, marcas e itens exclusivos)
+      // 2. Detectar Pássaros, Roedores, Peixes e Outros (Mapeado direto do Export Saurus)
+      const isPassaroOuRoedor = /\b(passaro|passaros|ave|aves|calopsita|periquito|canario|curio|bicudo|coleiro|trinca|papagaio|sabia|agapornis|mandarim|belga|galo|galinha|pintinho|codorna|pombo|postura|engorda|crescimento|alpiste|painco|girassol|semente|sementes|aveia|niger|colza|nabao|linhaca|milheto|quirera|farelo|fuba|sorgo|milho|farinhada|extrusada|mistura|gaiola|viveiro|poleiro|ninho|vitagold|avitrin|avitrina|piu sana|alcon|labcon|megazoo|nutropica|zootekna|bioaves|biotron|cartamo|argila|caneca|bebedouro|hamster|roedor|roedores|coelho|porquinho|chinchila|twister|feno|serragem|maravalha|alfafa|peixe|peixes|aquario|betta|kinguio|acara|tartaruga|jabuti|equino|cavalo|bovino|suino)\b/.test(texto);
+
+      // 3. Detectar Gatos
+      const isGato = /\b(gato|gatos|gat|cat|cats|felino|felinos|feline|kitten|gatinho|gatinhos|catnip|churu|inaba|dreamies|whiskas|friskies|kitekat|sheba|catchow|gatan|matisse|pipicat|kets|kelcat|putz|meau|katbom|mitzi|lukat|primocat|progato|sanicat|biocat|areia|silica|granulado higienico|granulado sanitario|caixa de areia|arranhador|bolas de pelo|hairball)\b/.test(texto);
+
+      // 4. Detectar Cães
       const isCaoExplicito = /\b(cao|caes|cachorro|cachorros|dog|dogs|canino|caninos|canine|puppy|pedigree|dogchow|keldog|bono|foster|cibau|tapete higienico|bifinho|ossinho|focinheira|enforcador)\b/.test(texto);
 
-      const isGato = /\b(gato|gatos|gat|cat|cats|felino|felinos|feline|kitten|gatinho|gatinhos|catnip|churu|inaba|dreamies|whiskas|friskies|kitekat|sheba|catchow|gatan|matisse|pipicat|kets|kelcat|putz|meau|katbom|mitzi|lukat|primocat|progato|sanicat|biocat|areia|silica|granulado higienico|granulado sanitario|caixa de areia|arranhador|bolas de pelo|hairball)\b/.test(texto) || (!isCaoExplicito && /\b(castrado|castrados)\b/.test(texto));
-
-      // 3. Detectar Pássaros, Roedores, Peixes e Outros (SEM a palavra "granel" solta)
-      const isPassaroOuRoedor = /\b(passaro|passaros|ave|aves|calopsita|periquito|canario|curio|bicudo|coleiro|trinca|papagaio|sabia|agapornis|mandarim|belga|galo|galinha|pintinho|codorna|pombo|postura|engorda|crescimento|alpiste|painco|girassol|semente|sementes|aveia|niger|colza|nabao|linhaca|milheto|quirera|farelo|fuba|sorgo|milho|farinhada|extrusada|gaiola|viveiro|poleiro|ninho|vitagold|avitrina|piu sana|alcon|labcon|megazoo|nutropica|zootekna|hamster|roedor|roedores|coelho|porquinho|chinchila|twister|feno|serragem|maravalha|alfafa|peixe|peixes|aquario|betta|kinguio|acara|tartaruga|jabuti|equino|cavalo|bovino|suino)\b/.test(texto);
-
-      // Definir em quais botões principais (Espécies) o produto aparece
+      // NOVO SISTEMA DE ROTEAMENTO (BLINDADO CONTRA MISTURAS)
       const especies = [];
       if (isFarmacia) {
         especies.push('Farmácia');
-        if (isGato && !isCaoExplicito) especies.push('Gatos');
-        else if (!isPassaroOuRoedor) especies.push('Cães');
-      } else if (isPassaroOuRoedor && !isGato && !isCaoExplicito) {
+      } else if (isPassaroOuRoedor) {
         especies.push('Pássaros & Roedores');
       } else if (isGato && !isCaoExplicito) {
         especies.push('Gatos');
       } else if (isGato && isCaoExplicito) {
         especies.push('Cães', 'Gatos');
       } else {
+        // Vala comum apenas se não bater com NENHUMA outra espécie
         especies.push('Cães');
       }
 
@@ -294,12 +295,12 @@
       } else if (/\b(areia|silica|granulado|bandeja|pa hig|caixa de areia)\b/.test(texto)) {
         sub = 'Areias e Higiene';
       } else if (/\b(tapete|fralda|shampoo|condicionador|colonia|perfume|sabonete|banho|educador|limpa orelha|rasqueadeira|escova|alicate)\b/.test(texto)) {
-        sub = isGato && !isCaoExplicito ? 'Areias e Higiene' : 'Higiene e Banho';
+        sub = (especies.includes('Gatos') && !especies.includes('Cães')) ? 'Areias e Higiene' : 'Higiene e Banho';
       } else if (/\b(sache|saches|pate|lata|umido)\b/.test(texto)) {
         sub = 'Sachês e Úmidos';
       } else if (/\b(petisco|petiscos|bifinho|ossinho|osso|biscoito|snack|churu|catnip|dreamies|palito|orelha|traqueia)\b/.test(texto)) {
         sub = 'Petiscos';
-      } else if (/\b(racao|racoes|granel|golden|premier|magnus|special|granplus|quatree|origens|naturalis|cibau|pedigree|whiskas|friskies|matisse|foster|bono|champ|keldog|kelcat|dogchow|catchow|gatan|biofresh|equilibrio|finotrato|sabor e vida|birbo|monello|alpiste|painco|girassol|semente|sementes|mistura|farinhada|extrusada|quirera|milho|postura|crescimento|engorda|feno|alfafa)\b/.test(texto) || texto.includes('alimento')) {
+      } else if (/\b(racao|racoes|granel|golden|premier|magnus|special|granplus|quatree|origens|naturalis|cibau|pedigree|whiskas|friskies|matisse|foster|bono|champ|keldog|kelcat|dogchow|catchow|gatan|biofresh|equilibrio|finotrato|sabor e vida|birbo|monello|alpiste|painco|girassol|semente|sementes|mistura|farinhada|extrusada|quirera|milho|postura|crescimento|engorda|feno|alfafa|argila mix|biotron)\b/.test(texto) || texto.includes('alimento')) {
         sub = 'Rações';
       }
 
@@ -321,7 +322,7 @@
           const parsed = data.map(autoTagProduct).filter(p => p.price > 0);
           if (parsed.length > 0) {
             products = parsed;
-            localStorage.setItem('recanto_cat_cache_v6', JSON.stringify(products));
+            localStorage.setItem('recanto_cat_cache_v7', JSON.stringify(products));
             renderStorefront();
           }
         }
