@@ -1534,11 +1534,52 @@
       filterProducts();
     }
 
+    function normalizeSearchText(str) {
+      return String(str || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim();
+    }
+
+    function editDistance(a, b) {
+      if (Math.abs(a.length - b.length) > 2) return 99;
+      const dp = Array.from({ length: a.length + 1 }, () => new Array(b.length + 1).fill(0));
+      for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+      for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+          dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+        }
+      }
+      return dp[a.length][b.length];
+    }
+
+    function smartMatchProduct(product, query) {
+      const qNorm = normalizeSearchText(query);
+      if (!qNorm) return true;
+      const fullText = normalizeSearchText([product.name, product.brand, product.category, product.subcategory].join(' '));
+      if (fullText.includes(qNorm)) return true;
+      const tokens = qNorm.split(/\s+/).filter(Boolean);
+      const words = fullText.split(/[^a-z0-9]+/).filter(Boolean);
+      return tokens.every(tok => {
+        if (fullText.includes(tok)) return true;
+        if (tok.length < 4) return false;
+        const maxDist = tok.length >= 7 ? 2 : 1;
+        return words.some(w => {
+          if (editDistance(tok, w) <= maxDist) return true;
+          if (w.length > tok.length && editDistance(tok, w.slice(0, tok.length)) <= 1) return true;
+          return false;
+        });
+      });
+    }
+
     function filterProducts() {
-      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const query = document.getElementById('search-input').value.trim();
 
       const filtered = products.filter(p => {
-        const matchQuery = p.name.toLowerCase().includes(query) || (p.brand && p.brand.toLowerCase().includes(query));
+        const matchQuery = smartMatchProduct(p, query);
         const matchCat = currentCategory === "Todos" || p.category === currentCategory;
         const matchSub = currentSubcategory === "Todos" || p.subcategory === currentSubcategory;
         const matchBrand = currentBrand === "Todos" || p.brand === currentBrand;
